@@ -1,0 +1,373 @@
+<template>
+    <div class="app">
+        <header class="app-header">
+            <div class="header-brand">
+                <span class="brand-mark">CP</span>
+                <div>
+                    <h1 class="brand-title">CodePulse AI</h1>
+                    <p class="brand-sub">Daily challenges · Streaks · Leaderboard</p>
+                </div>
+            </div>
+            <button type="button" class="btn-primary" onclick={openModal}>+ New User</button>
+        </header>
+
+        <div class="app-body">
+            <aside class="sidebar">
+                <div class="sidebar-head">
+                    <h2 class="sidebar-title">Your team</h2>
+                    <p class="sidebar-sub">{userCountLabel}</p>
+                </div>
+
+                <div class="user-list">
+                    <template for:each={displayUsers} for:item="user">
+                        <div
+                            key={user.Id}
+                            class={user.cardClass}
+                            data-id={user.Id}
+                            onclick={selectUser}
+                            role="button"
+                            tabindex="0"
+                        >
+                            <div class="avatar">
+                                <template if:true={user.Avatar_URL__c}>
+                                    <img src={user.Avatar_URL__c} class="avatar-img" alt="" />
+                                </template>
+                                <template if:false={user.Avatar_URL__c}>
+                                    <span class="avatar-initials">{user.initials}</span>
+                                </template>
+                            </div>
+                            <div class="user-meta">
+                                <span class="user-name">{user.Full_Name__c}</span>
+                                <span class="user-streak">{user.Current_Streak__c} day streak</span>
+                                <div class="user-mail-info" style="font-size: 0.75rem; color: #64748b; margin-top: 4px; display: flex; flex-direction: column; gap: 2px; line-height: 1.2;">
+                                    <span>{user.mailStatusText}</span>
+                                    <span>Next mail: {user.nextMailTime}</span>
+                                </div>
+                            </div>
+                            <button
+                                type="button"
+                                class="icon-btn icon-btn-danger"
+                                data-id={user.Id}
+                                onclick={handleDelete}
+                                title="Remove user"
+                                aria-label="Remove user"
+                            >
+                                <svg viewBox="0 0 24 24" aria-hidden="true">
+                                    <path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </template>
+                    <template if:false={hasUsers}>
+                        <p class="sidebar-empty">No users yet. Add your first coder.</p>
+                    </template>
+                </div>
+            </aside>
+
+            <main class="main">
+                <template if:true={analytics}>
+                    <section class="stats-row" aria-label="Platform statistics">
+                        <article class="stat-card">
+                            <span class="stat-label">Total users</span>
+                            <span class="stat-value">{analytics.totalUsers}</span>
+                        </article>
+                        <article class="stat-card">
+                            <span class="stat-label">Active coders</span>
+                            <span class="stat-value">{analytics.activeUsers}</span>
+                        </article>
+                        <article class="stat-card">
+                            <span class="stat-label">Solved today</span>
+                            <span class="stat-value">{analytics.solvedToday}</span>
+                        </article>
+                        <article class="stat-card stat-card-accent">
+                            <span class="stat-label">Top coder</span>
+                            <span class="stat-value stat-value-sm">{analytics.topCoder}</span>
+                            <span class="stat-hint">{analytics.topStreak} day streak</span>
+                        </article>
+                    </section>
+                </template>
+
+                <template if:true={selectedUser}>
+                    <section class="profile-banner">
+                        <div class="profile-banner-text">
+                            <p class="profile-eyebrow">Active profile</p>
+                            <h2 class="profile-name">Welcome, {selectedUser.Full_Name__c}</h2>
+                            <div class="profile-links">
+                                <template if:true={selectedUser.LeetCode_Username__c}>
+                                    <span class="profile-chip">LeetCode · {selectedUser.LeetCode_Username__c}</span>
+                                </template>
+                                <template if:true={selectedUser.CodeChef_Username__c}>
+                                    <span class="profile-chip">CodeChef · {selectedUser.CodeChef_Username__c}</span>
+                                </template>
+                            </div>
+                        </div>
+                        <button type="button" class="btn-secondary" onclick={openEditModal}>Edit profile</button>
+                    </section>
+
+                    <section class="profile-stats" aria-label="Your progress">
+                        <article class="metric-card">
+                            <span class="metric-label">Current streak</span>
+                            <span class="metric-value">{selectedUser.Current_Streak__c}</span>
+                            <span class="metric-hint">Best {selectedUser.Longest_Streak__c}</span>
+                        </article>
+                        <article class="metric-card">
+                            <span class="metric-label">Problems solved</span>
+                            <span class="metric-value">{selectedUser.Total_Solved__c}</span>
+                        </article>
+                        <article class="metric-card">
+                            <span class="metric-label">Reminders</span>
+                            <span class="metric-detail">Evening {selectedUser.Reminder_Time__c}</span>
+                            <span class="metric-detail">Morning {selectedUser.Morning_Summary_Time__c}</span>
+                        </article>
+                        <article class="metric-card metric-card-quote">
+                            <span class="metric-label">Today's motivation</span>
+                            <p class="quote-text">&ldquo;{motivationQuote}&rdquo;</p>
+                        </article>
+                    </section>
+                </template>
+
+                <template if:false={selectedUser}>
+                    <section class="select-hint">
+                        <p>Select a user from the sidebar to track streaks and mark problems solved.</p>
+                    </section>
+                </template>
+
+                <section class="challenges-section">
+                    <div class="section-head">
+                        <h2 class="section-title">Daily challenges</h2>
+                        <p class="section-sub">LeetCode & CodeChef — new problems at 11:00 PM</p>
+                    </div>
+
+                    <div class="platform-block">
+                        <h3 class="platform-title">LeetCode</h3>
+                        <div class="challenges-grid">
+                            <article class="challenge-card challenge-card-today">
+                                <div class="challenge-badge">Today</div>
+                                <template if:true={leetcodeToday}>
+                                    <div class="challenge-head">
+                                        <h4 class="challenge-topic">{leetcodeToday.Topic__c}</h4>
+                                        <span class={leetcodeTodayDifficultyClass}>{leetcodeToday.Difficulty__c}</span>
+                                    </div>
+                                    <p class="challenge-summary">{leetcodeToday.AI_Summary__c}</p>
+                                    <p class="challenge-meta">{leetcodeToday.Completed_Count__c} completions today</p>
+                                    <template if:true={leetcodeTodayCompleted}>
+                                        <p class="completed-badge">Completed</p>
+                                    </template>
+                                    <div class="challenge-actions">
+                                        <a href={leetcodeToday.Problem_Link__c} target="_blank" rel="noopener noreferrer" class="btn-outline">Open</a>
+                                        <template if:false={leetcodeTodayCompleted}>
+                                            <button type="button" class="btn-primary" data-id={leetcodeToday.Id} onclick={handleSolveClick}>Complete</button>
+                                        </template>
+                                    </div>
+                                </template>
+                                <template if:false={leetcodeToday}>
+                                    <p class="empty-message">No LeetCode problem for today.</p>
+                                </template>
+                            </article>
+
+                            <article class="challenge-card challenge-card-tomorrow">
+                                <div class="challenge-badge challenge-badge-muted">Tomorrow</div>
+                                <template if:true={leetcodeTomorrow}>
+                                    <div class="challenge-head">
+                                        <h4 class="challenge-topic">{leetcodeTomorrow.Topic__c}</h4>
+                                        <span class={leetcodeTomorrowDifficultyClass}>{leetcodeTomorrow.Difficulty__c}</span>
+                                    </div>
+                                    <p class="challenge-summary">{leetcodeTomorrow.AI_Summary__c}</p>
+                                </template>
+                                <template if:false={leetcodeTomorrow}>
+                                    <p class="empty-message">Tomorrow's LeetCode problem loads at 11 PM.</p>
+                                </template>
+                            </article>
+                        </div>
+                    </div>
+
+                    <div class="platform-block">
+                        <h3 class="platform-title">CodeChef</h3>
+                        <div class="challenges-grid">
+                            <article class="challenge-card challenge-card-today">
+                                <div class="challenge-badge">Today</div>
+                                <template if:true={codechefToday}>
+                                    <div class="challenge-head">
+                                        <h4 class="challenge-topic">{codechefToday.Topic__c}</h4>
+                                        <span class={codechefTodayDifficultyClass}>{codechefToday.Difficulty__c}</span>
+                                    </div>
+                                    <p class="challenge-summary">{codechefToday.AI_Summary__c}</p>
+                                    <p class="challenge-meta">{codechefToday.Completed_Count__c} completions today</p>
+                                    <template if:true={codechefTodayCompleted}>
+                                        <p class="completed-badge">Completed</p>
+                                    </template>
+                                    <div class="challenge-actions">
+                                        <a href={codechefToday.Problem_Link__c} target="_blank" rel="noopener noreferrer" class="btn-outline">Open</a>
+                                        <template if:false={codechefTodayCompleted}>
+                                            <button type="button" class="btn-primary" data-id={codechefToday.Id} onclick={handleSolveClick}>Complete</button>
+                                        </template>
+                                    </div>
+                                </template>
+                                <template if:false={codechefToday}>
+                                    <p class="empty-message">No CodeChef problem for today.</p>
+                                </template>
+                            </article>
+
+                            <article class="challenge-card challenge-card-tomorrow">
+                                <div class="challenge-badge challenge-badge-muted">Tomorrow</div>
+                                <template if:true={codechefTomorrow}>
+                                    <div class="challenge-head">
+                                        <h4 class="challenge-topic">{codechefTomorrow.Topic__c}</h4>
+                                        <span class={codechefTomorrowDifficultyClass}>{codechefTomorrow.Difficulty__c}</span>
+                                    </div>
+                                    <p class="challenge-summary">{codechefTomorrow.AI_Summary__c}</p>
+                                </template>
+                                <template if:false={codechefTomorrow}>
+                                    <p class="empty-message">Tomorrow's CodeChef problem loads at 11 PM.</p>
+                                </template>
+                            </article>
+                        </div>
+                    </div>
+                </section>
+
+                <template if:true={activeLeaderboard}>
+                    <section class="leaderboard-section">
+                        <div class="section-head section-head-row">
+                            <div>
+                                <h2 class="section-title">Community leaderboard</h2>
+                                <p class="section-sub">Ranked by streak or total solved</p>
+                            </div>
+                            <div class="tab-group" role="tablist">
+                                <button type="button" class={streakTabClass} onclick={showStreakBoard}>Streak</button>
+                                <button type="button" class={solvedTabClass} onclick={showSolvedBoard}>Solved</button>
+                            </div>
+                        </div>
+
+                        <div class="leaderboard-table">
+                            <template for:each={activeLeaderboard} for:item="coder">
+                                <div key={coder.Id} class="leaderboard-row">
+                                    <span class="leader-rank">{coder._rank}</span>
+                                    <div class="leader-info">
+                                        <span class="leader-name">{coder.Full_Name__c}</span>
+                                    </div>
+                                    <span class="leader-score">
+                                        <template if:true={isStreakLeaderboard}>{coder.Current_Streak__c} days</template>
+                                        <template if:true={isSolvedLeaderboard}>{coder.Total_Solved__c} solved</template>
+                                    </span>
+                                </div>
+                            </template>
+                        </div>
+                    </section>
+                </template>
+            </main>
+        </div>
+    </div>
+
+    <template if:true={showModal}>
+        <section class="modal-backdrop" role="dialog" aria-modal="true">
+            <div class="modal">
+                <div class="modal-header">
+                    <h2 class="modal-title">Create new coder</h2>
+                    <p class="modal-sub">Add a teammate to track challenges and streaks.</p>
+                </div>
+
+                <div class="form-group">
+                    <label>Full name</label>
+                    <lightning-input variant="label-hidden" placeholder="Your full name" value={fullName} onchange={handleName}></lightning-input>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <lightning-input type="email" variant="label-hidden" placeholder="your.email@example.com" value={email} onchange={handleEmail}></lightning-input>
+                </div>
+                <div class="form-group">
+                    <label>Avatar URL (optional)</label>
+                    <lightning-input variant="label-hidden" placeholder="https://..." value={avatarUrl} onchange={handleAvatar}></lightning-input>
+                </div>
+                <div class="form-group">
+                    <label>LeetCode username</label>
+                    <lightning-input variant="label-hidden" placeholder="LeetCode handle" value={leetcode} onchange={handleLeetcode}></lightning-input>
+                </div>
+                <div class="form-group">
+                    <label>CodeChef username</label>
+                    <lightning-input variant="label-hidden" placeholder="CodeChef handle" value={codechef} onchange={handleCodechef}></lightning-input>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Morning motivation</label>
+                        <lightning-input type="time" variant="label-hidden" value={morningTime} onchange={handleMorningTime}></lightning-input>
+                    </div>
+                    <div class="form-group">
+                        <label>Daily reminder</label>
+                        <lightning-input type="time" variant="label-hidden" value={reminderTime} onchange={handleReminderTime}></lightning-input>
+                    </div>
+                </div>
+                <lightning-input type="checkbox" label="Enable reminders" checked={reminderEnabled} onchange={handleReminderEnabled}></lightning-input>
+                <lightning-input type="checkbox" label="Morning motivation emails" checked={motivationEmails} onchange={handleMotivation}></lightning-input>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn-ghost" onclick={closeModal}>Cancel</button>
+                    <button type="button" class="btn-primary" onclick={saveUser}>Create user</button>
+                </div>
+            </div>
+        </section>
+    </template>
+
+    <template if:true={showEditModal}>
+        <section class="modal-backdrop" role="dialog" aria-modal="true">
+            <div class="modal">
+                <div class="modal-header">
+                    <h2 class="modal-title">Edit profile</h2>
+                    <p class="modal-sub">Update coding preferences and reminders.</p>
+                </div>
+
+                <div class="form-group">
+                    <label>Full name</label>
+                    <lightning-input variant="label-hidden" value={fullName} onchange={handleName}></lightning-input>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <lightning-input type="email" variant="label-hidden" value={email} onchange={handleEmail}></lightning-input>
+                </div>
+                <div class="form-group">
+                    <label>Avatar URL</label>
+                    <lightning-input variant="label-hidden" value={avatarUrl} onchange={handleAvatar}></lightning-input>
+                </div>
+                <div class="form-group">
+                    <label>LeetCode username</label>
+                    <lightning-input variant="label-hidden" value={leetcode} onchange={handleLeetcode}></lightning-input>
+                </div>
+                <div class="form-group">
+                    <label>CodeChef username</label>
+                    <lightning-input variant="label-hidden" value={codechef} onchange={handleCodechef}></lightning-input>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Morning motivation</label>
+                        <lightning-input type="time" variant="label-hidden" value={morningTime} onchange={handleMorningTime}></lightning-input>
+                    </div>
+                    <div class="form-group">
+                        <label>Daily reminder</label>
+                        <lightning-input type="time" variant="label-hidden" value={reminderTime} onchange={handleReminderTime}></lightning-input>
+                    </div>
+                </div>
+                <lightning-input type="checkbox" label="Enable reminders" checked={reminderEnabled} onchange={handleReminderEnabled}></lightning-input>
+                <lightning-input type="checkbox" label="Morning motivation emails" checked={motivationEmails} onchange={handleMotivation}></lightning-input>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn-ghost" onclick={closeModal}>Cancel</button>
+                    <button type="button" class="btn-primary" onclick={saveEdit}>Save changes</button>
+                </div>
+            </div>
+        </section>
+    </template>
+
+    <template if:true={showDeleteConfirm}>
+        <section class="modal-backdrop" role="dialog" aria-modal="true">
+            <div class="modal modal-sm">
+                <div class="modal-header">
+                    <h2 class="modal-title">Delete user?</h2>
+                    <p class="modal-sub">This action cannot be undone.</p>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-ghost" onclick={cancelDelete}>Cancel</button>
+                    <button type="button" class="btn-danger" onclick={confirmDelete}>Delete</button>
+                </div>
+            </div>
+        </section>
+    </template>
+</template>

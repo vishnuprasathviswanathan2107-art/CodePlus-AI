@@ -1,0 +1,21 @@
+<apex:page controller="ChallengeResponseController" showHeader="false" sidebar="false" standardStylesheets="false">
+    <html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <style>
+            body { font-family: Inter, system-ui, sans-serif; background: #f8fafc; margin: 0; padding: 40px 20px; }
+            .card { max-width: 480px; margin: 0 auto; background: #fff; border-radius: 16px; padding: 32px; box-shadow: 0 10px 30px rgba(15,23,42,.1); text-align: center; }
+            h1 { font-size: 22px; color: #111827; margin: 0 0 12px; }
+            p { color: #4b5563; line-height: 1.6; margin: 0; }
+            .ok { color: #059669; font-weight: 600; }
+            .err { color: #dc2626; }
+        </style>
+    </head>
+    <body>
+        <div class="card">
+            <h1>{!pageTitle}</h1>
+            <p class="{!IF(isSuccess, 'ok', 'err')}">{!message}</p>
+        </div>
+    </body>
+    </html>
+</apex:page>

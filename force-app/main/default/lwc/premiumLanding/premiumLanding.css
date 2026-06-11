@@ -1,0 +1,245 @@
+:host {
+    display: block;
+    font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+.page {
+    min-height: 100vh;
+    background-color: #f9fafb;
+}
+
+.hero {
+    position: relative;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.hero-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.hero-inner {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    z-index: 1;
+}
+
+.nav-header {
+    position: relative;
+    z-index: 20;
+}
+
+.nav-container {
+    max-width: 80rem;
+    margin: 0 auto;
+    padding: 1.5rem 2rem;
+}
+
+.nav-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.brand {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #111827;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.nav-desktop {
+    display: none;
+    align-items: center;
+    gap: 2rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-link {
+    color: #111827;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.nav-link:hover {
+    color: #374151;
+}
+
+.menu-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    padding: 0.25rem;
+    color: #111827;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.menu-toggle:hover {
+    color: #374151;
+}
+
+.icon {
+    width: 1.5rem;
+    height: 1.5rem;
+    fill: none;
+}
+
+.nav-mobile {
+    margin-top: 1rem;
+    padding: 1rem;
+    border-radius: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.nav-mobile-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.nav-mobile-link {
+    display: block;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.5rem;
+    color: #111827;
+    text-decoration: none;
+    transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.nav-mobile-link:hover {
+    color: #374151;
+    background-color: #f3f4f6;
+}
+
+.hero-main {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.hero-content {
+    margin-top: -20rem;
+    text-align: center;
+    padding: 0 1.5rem;
+}
+
+.eyebrow {
+    margin: 0 0 1rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #4b5563;
+}
+
+.headline {
+    margin: 0;
+    line-height: 1;
+    letter-spacing: -0.05em;
+}
+
+.headline-line {
+    display: block;
+    font-size: 3.75rem;
+    font-weight: 400;
+}
+
+.headline-muted {
+    color: #6b7280;
+}
+
+.headline-accent {
+    margin-top: -12px;
+    color: #202a36;
+}
+
+.subtitle {
+    margin: 1.5rem auto 1.5rem;
+    max-width: 42rem;
+    font-size: 1.125rem;
+    color: #4b5563;
+}
+
+.cta-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.btn {
+    border: none;
+    border-radius: 9999px;
+    padding: 0.5rem 1rem;
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.btn-secondary {
+    background-color: #d1d5db;
+    color: #1f2937;
+}
+
+.btn-secondary:hover {
+    background-color: #9ca3af;
+}
+
+.btn-primary {
+    background-color: #202a36;
+    color: #ffffff;
+}
+
+.btn-primary:hover {
+    background-color: #1a2229;
+}
+
+@media (min-width: 768px) {
+    .nav-desktop {
+        display: flex;
+    }
+
+    .menu-toggle {
+        display: none;
+    }
+
+    .nav-mobile {
+        display: none;
+    }
+
+    .headline-line {
+        font-size: 4.5rem;
+    }
+
+    .subtitle {
+        font-size: 1.25rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .headline-line {
+        font-size: 6rem;
+    }
+}

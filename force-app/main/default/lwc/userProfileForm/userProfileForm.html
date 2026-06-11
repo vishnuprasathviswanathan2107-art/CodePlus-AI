@@ -1,0 +1,166 @@
+<template>
+
+    <div class="container">
+
+        <div class="mainCard">
+
+            <!-- LEFT SIDE -->
+
+            <div class="leftSection">
+
+                <div class="logo">
+                    🚀 CodePulse AI
+                </div>
+
+                <div class="tagline">
+
+                    Your AI-powered coding
+                    accountability platform.
+
+                    Track your growth.
+                    Build consistency.
+                    Master problem solving.
+
+                </div>
+
+                <div class="feature">
+                    🔥 Daily coding streak tracking
+                </div>
+
+                <div class="feature">
+                    🤖 AI-generated hints & summaries
+                </div>
+
+                <div class="feature">
+                    ⏰ Smart reminder system
+                </div>
+
+                <div class="feature">
+                    📈 Coding analytics dashboard
+                </div>
+
+                <div class="feature">
+                    🏆 LeetCode + CodeChef integration
+                </div>
+
+            </div>
+
+            <!-- RIGHT SIDE -->
+
+            <div class="rightSection">
+
+                <div class="formTitle">
+
+                    Create Your Profile
+
+                </div>
+
+                <div class="formSubtitle">
+
+                    Enter your details below — name, email, and your LeetCode / CodeChef usernames.
+
+                </div>
+
+                <div class="customInput">
+
+                    <div class="avatarRow">
+                        <div class="avatarPreview" style="background-image:var(--avatar-url)"></div>
+                        <lightning-input
+                            label="Avatar Image URL"
+                            placeholder="https://..."
+                            value={avatarUrl}
+                            onchange={handleAvatarUrl}>
+                        </lightning-input>
+                    </div>
+
+                    <lightning-input
+                        label="Full Name"
+                        placeholder="Your full name"
+                        required
+                        value={fullName}
+                        onchange={handleName}>
+                    </lightning-input>
+
+                </div>
+
+                <div class="customInput">
+
+                    <lightning-input
+                        type="email"
+                        label="Email Address"
+                        placeholder="your.email@example.com"
+                        required
+                        value={email}
+                        onchange={handleEmail}>
+                    </lightning-input>
+
+                </div>
+
+                <div class="customInput">
+
+                    <lightning-input
+                        label="LeetCode Username"
+                        placeholder="Your LeetCode username"
+                        value={leetcode}
+                        onchange={handleLeetCode}>
+                    </lightning-input>
+
+                </div>
+
+                <div class="customInput">
+
+                    <lightning-input
+                        label="CodeChef Username"
+                        placeholder="Your CodeChef username"
+                        value={codechef}
+                        onchange={handleCodeChef}>
+                    </lightning-input>
+
+                </div>
+
+                <div class="customInput">
+
+                    <lightning-input
+                        type="time"
+                        label="Daily Reminder Time"
+                        value={reminderTime}
+                        onchange={handleReminderTime}>
+                    </lightning-input>
+
+                </div>
+
+                <div class="customInput">
+
+                    <lightning-input
+                        type="time"
+                        label="Morning Motivation Time"
+                        value={summaryTime}
+                        onchange={handleSummaryTime}>
+                    </lightning-input>
+
+                </div>
+
+                <lightning-input
+                    type="checkbox"
+                    label="Enable Motivation Emails"
+                    checked={motivationEmails}
+                    onchange={handleMotivation}>
+                </lightning-input>
+
+                <div class="saveButton">
+
+                    <lightning-button
+                        variant="brand"
+                        label="Launch My Dashboard 🚀"
+                        onclick={saveProfile}>
+                    </lightning-button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</template>

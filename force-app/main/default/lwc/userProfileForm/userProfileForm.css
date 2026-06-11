@@ -1,0 +1,48 @@
+.container {
+    min-height: 100vh;
+    background: linear-gradient(135deg,#05060a,#0b1220,#0f172a);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:32px;
+}
+
+.mainCard{
+    width:100%;
+    max-width:1100px;
+    display:grid;
+    grid-template-columns:1fr 420px;
+    gap:24px;
+    background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    backdrop-filter:blur(12px);
+    border:1px solid rgba(255,255,255,0.03);
+    border-radius:20px;
+    overflow:hidden;
+    box-shadow:0 20px 60px rgba(2,6,23,0.7);
+}
+
+.leftSection{
+    padding:36px;
+    color:#dbeafe;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+}
+
+.logo{font-size:36px;font-weight:700;margin-bottom:12px}
+.tagline{font-size:16px;color:#93c5fd;line-height:1.6;margin-bottom:20px}
+.feature{margin-bottom:12px;font-size:14px;color:#c7e0ff}
+
+.rightSection{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:28px;border-left:1px solid rgba(255,255,255,0.03)}
+.formTitle{font-size:20px;font-weight:700;margin-bottom:6px;color:#e6f0ff}
+.formSubtitle{color:#9fb7d6;margin-bottom:18px}
+.customInput{margin-bottom:14px}
+.saveButton{margin-top:18px}
+
+.avatarRow{display:flex;gap:12px;align-items:center;margin-bottom:12px}
+.avatarPreview{width:56px;height:56px;border-radius:50%;background-size:cover;background-position:center;background-color:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.04)}
+
+@media (max-width:900px){
+    .mainCard{grid-template-columns:1fr;padding:20px}
+    .rightSection{order:2}
+}

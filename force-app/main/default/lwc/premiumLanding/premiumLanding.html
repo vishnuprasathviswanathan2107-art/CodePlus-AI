@@ -1,0 +1,81 @@
+<template>
+    <div class="page">
+        <section class="hero">
+            <video
+                class="hero-video"
+                autoplay
+                muted
+                loop
+                playsinline
+            >
+                <source src={videoUrl} type="video/mp4" />
+            </video>
+
+            <div class="hero-inner">
+                <header class="nav-header">
+                    <div class="nav-container">
+                        <nav class="nav-bar">
+                            <a href="#" class="brand">SkyElite</a>
+
+                            <ul class="nav-desktop">
+                                <template for:each={navItems} for:item="item">
+                                    <li key={item.id}>
+                                        <a href={item.href} class="nav-link">{item.label}</a>
+                                    </li>
+                                </template>
+                            </ul>
+
+                            <button
+                                type="button"
+                                class="menu-toggle"
+                                onclick={toggleMobileMenu}
+                                aria-label={menuAriaLabel}
+                            >
+                                <template if:true={mobileMenuOpen}>
+                                    <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                                        <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                    </svg>
+                                </template>
+                                <template if:false={mobileMenuOpen}>
+                                    <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                                        <path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                    </svg>
+                                </template>
+                            </button>
+                        </nav>
+
+                        <template if:true={mobileMenuOpen}>
+                            <div class="nav-mobile">
+                                <ul class="nav-mobile-list">
+                                    <template for:each={navItems} for:item="item">
+                                        <li key={item.id}>
+                                            <a href={item.href} class="nav-mobile-link" onclick={closeMobileMenu}>{item.label}</a>
+                                        </li>
+                                    </template>
+                                </ul>
+                            </div>
+                        </template>
+                    </div>
+                </header>
+
+                <main class="hero-main">
+                    <div class="hero-content">
+                        <p class="eyebrow">PRIVATE JETS</p>
+
+                        <h1 class="headline">
+                            <span class="headline-line headline-muted">Premium.</span>
+                            <span class="headline-line headline-accent">Accessible.</span>
+                        </h1>
+
+                        <p class="subtitle">Your dedication deserves recognition.</p>
+
+                        <div class="cta-row">
+                            <button type="button" class="btn btn-secondary">Discover</button>
+                            <button type="button" class="btn btn-primary">Book Now</button>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </section>
+    </div>
+</template>

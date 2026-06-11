@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomLabels xmlns="http://soap.sforce.com/2006/04/metadata">
+    <labels>
+        <fullName>CodePulse_Email_Base_URL</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Base URL for email action links (Salesforce Site or org domain)</shortDescription>
+        <value>https://your-domain.my.salesforce.com</value>
+    </labels>
+</CustomLabels>
